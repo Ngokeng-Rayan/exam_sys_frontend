@@ -22,8 +22,8 @@
       <span class="badge badge-lg" [ngClass]="gradeService.getStatusBadgeClass(grade.status)">
         {{ gradeService.getStatusLabel(grade.status) }}
       </span>
-      <span class="badge badge-lg" [ngClass]="gradeService.isPassed(grade.gradeFinal) ? 'badge-success' : 'badge-error'">
-        {{ gradeService.getMention(grade.gradeFinal) }}
+      <span class="badge badge-lg" [ngClass]="gradeService.isPassed(grade.gradeFinal ?? null) ? 'badge-success' : 'badge-error'">
+        {{ gradeService.getMention(grade.gradeFinal ?? null) }}
       </span>
     </div>
 
@@ -83,8 +83,8 @@
           </div>
           <div class="grade-item highlight">
             <span class="grade-label">Note Finale</span>
-            <span class="grade-value" [ngClass]="gradeService.getGradeColorClass(grade.gradeFinal)">
-              <strong>{{ grade.gradeFinal !== null ? grade.gradeFinal.toFixed(2) : '-' }} / 20</strong>
+            <span class="grade-value" [ngClass]="gradeService.getGradeColorClass(grade.gradeFinal ?? null)">
+              <strong>{{ grade.gradeFinal != null ? grade.gradeFinal.toFixed(2) : '-' }} / 20</strong>
             </span>
           </div>
         </div>

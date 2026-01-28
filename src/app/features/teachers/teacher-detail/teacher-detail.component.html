@@ -25,11 +25,11 @@
     </div>
 
     <div class="status-section">
-      <span class="badge badge-lg" [ngClass]="teacherService.getGradeBadgeClass(teacher.grade)">
-        {{ teacherService.getGradeLabel(teacher.grade) }}
+      <span class="badge badge-lg" [ngClass]="teacherService.getGradeBadgeClass(teacher.grade || '')">
+        {{ teacherService.getGradeLabel(teacher.grade || '') }}
       </span>
-      <span class="badge badge-lg" [ngClass]="teacherService.getTeacherTypeBadgeClass(teacher.teacherType)">
-        {{ teacherService.getTeacherTypeLabel(teacher.teacherType) }}
+      <span class="badge badge-lg" [ngClass]="teacherService.getTeacherTypeBadgeClass(teacher.teacherType || '')">
+        {{ teacherService.getTeacherTypeLabel(teacher.teacherType || '') }}
       </span>
     </div>
 
@@ -91,8 +91,8 @@
           <div class="info-item">
             <span class="info-label">Grade</span>
             <span class="info-value">
-              <span class="badge" [ngClass]="teacherService.getGradeBadgeClass(teacher.grade)">
-                {{ teacherService.getGradeLabel(teacher.grade) }}
+              <span class="badge" [ngClass]="teacherService.getGradeBadgeClass(teacher.grade || '')">
+                {{ teacherService.getGradeLabel(teacher.grade || '') }}
               </span>
             </span>
           </div>
@@ -100,8 +100,8 @@
           <div class="info-item">
             <span class="info-label">Type</span>
             <span class="info-value">
-              <span class="badge" [ngClass]="teacherService.getTeacherTypeBadgeClass(teacher.teacherType)">
-                {{ teacherService.getTeacherTypeLabel(teacher.teacherType) }}
+              <span class="badge" [ngClass]="teacherService.getTeacherTypeBadgeClass(teacher.teacherType || '')">
+                {{ teacherService.getTeacherTypeLabel(teacher.teacherType || '') }}
               </span>
             </span>
           </div>

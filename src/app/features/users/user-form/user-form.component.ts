@@ -17,13 +17,13 @@ export class UserFormComponent implements OnInit {
   error = '';
   isEditMode = false;
   userId: number | null = null;
-  
+
   roles: string[] = [];
   statuses: string[] = [];
 
   constructor(
     private fb: FormBuilder,
-    private userService: UserService,
+    public userService: UserService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -43,13 +43,13 @@ export class UserFormComponent implements OnInit {
   ngOnInit() {
     this.roles = this.userService.getRoles();
     this.statuses = this.userService.getStatuses();
-    
+
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode = true;
       this.userId = parseInt(id, 10);
       this.loadUser();
-      
+
       // En mode édition, le mot de passe n'est pas obligatoire
       this.userForm.get('password')?.clearValidators();
       this.userForm.get('confirmPassword')?.clearValidators();
@@ -60,7 +60,7 @@ export class UserFormComponent implements OnInit {
 
   loadUser() {
     if (!this.userId) return;
-    
+
     this.loading = true;
     this.userService.getUser(this.userId).subscribe({
       next: (response) => {
@@ -88,7 +88,7 @@ export class UserFormComponent implements OnInit {
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');
-    
+
     if (password && confirmPassword && password.value && confirmPassword.value) {
       if (password.value !== confirmPassword.value) {
         confirmPassword.setErrors({ passwordMismatch: true });
@@ -144,7 +144,7 @@ export class UserFormComponent implements OnInit {
 
   updateUser() {
     if (!this.userId) return;
-    
+
     const formValue = this.userForm.value;
     const data: UpdateUserRequest = {
       matricule: formValue.matricule,

@@ -34,5 +34,9 @@ export interface TeacherAssignment {
     notes?: string;
     teacher?: Teacher;
     ecue?: any;
+    courseUnit?: any;
     class?: any;
+    semester?: any;
+    academicYear?: any;
+    department?: any;
 }

@@ -84,13 +84,13 @@
             <td><strong>{{ grade.gradeCC !== null ? grade.gradeCC : '-' }}</strong></td>
             <td><strong>{{ grade.gradeExam !== null ? grade.gradeExam : '-' }}</strong></td>
             <td>
-              <strong [ngClass]="gradeService.getGradeColorClass(grade.gradeFinal)">
-                {{ grade.gradeFinal !== null ? grade.gradeFinal.toFixed(2) : '-' }}
+              <strong [ngClass]="gradeService.getGradeColorClass(grade.gradeFinal ?? null)">
+                {{ grade.gradeFinal != null ? grade.gradeFinal.toFixed(2) : '-' }}
               </strong>
             </td>
             <td>
-              <span class="badge" [ngClass]="gradeService.isPassed(grade.gradeFinal) ? 'badge-success' : 'badge-error'">
-                {{ gradeService.getMention(grade.gradeFinal) }}
+              <span class="badge" [ngClass]="gradeService.isPassed(grade.gradeFinal ?? null) ? 'badge-success' : 'badge-error'">
+                {{ gradeService.getMention(grade.gradeFinal ?? null) }}
               </span>
             </td>
             <td>

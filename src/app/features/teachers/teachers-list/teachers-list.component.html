@@ -92,13 +92,13 @@
             <td>{{ teacher.email }}</td>
             <td>{{ teacher.gender === 'M' ? 'M' : 'F' }}</td>
             <td>
-              <span class="badge" [ngClass]="teacherService.getGradeBadgeClass(teacher.grade)">
-                {{ teacherService.getGradeLabel(teacher.grade) }}
+              <span class="badge" [ngClass]="teacherService.getGradeBadgeClass(teacher.grade || '')">
+                {{ teacherService.getGradeLabel(teacher.grade || '') }}
               </span>
             </td>
             <td>
-              <span class="badge" [ngClass]="teacherService.getTeacherTypeBadgeClass(teacher.teacherType)">
-                {{ teacherService.getTeacherTypeLabel(teacher.teacherType) }}
+              <span class="badge" [ngClass]="teacherService.getTeacherTypeBadgeClass(teacher.teacherType || '')">
+                {{ teacherService.getTeacherTypeLabel(teacher.teacherType || '') }}
               </span>
             </td>
             <td>{{ teacher.specialty || 'N/A' }}</td>
