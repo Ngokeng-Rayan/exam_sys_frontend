@@ -1,0 +1,149 @@
+.page-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: var(--spacing-xl);
+}
+
+.page-subtitle {
+  color: var(--gray-600);
+  font-size: 1rem;
+  margin-top: var(--spacing-xs);
+}
+
+.current-year-card {
+  background: linear-gradient(135deg, var(--primary-500), var(--primary-600));
+  color: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.current-year-header h3 {
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.current-year-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.year-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.year-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.year-code {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.year-dates {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+.management-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.management-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: white;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: var(--primary-300);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+  }
+}
+
+.card-icon {
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.bg-primary {
+  background: var(--primary-100);
+}
+
+.bg-info {
+  background: var(--info-100);
+}
+
+.bg-success {
+  background: var(--success-100);
+}
+
+.bg-warning {
+  background: var(--warning-100);
+}
+
+.bg-secondary {
+  background: var(--gray-100);
+}
+
+.card-content {
+  flex: 1;
+}
+
+.card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.card-description {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  margin: 0;
+}
+
+.card-arrow {
+  font-size: 1.5rem;
+  color: var(--gray-400);
+  flex-shrink: 0;
+}
+
+.info-section {
+  margin-top: var(--spacing-2xl);
+}
+
+.info-section ul {
+  margin: var(--spacing-md) 0;
+  padding-left: var(--spacing-xl);
+}
+
+.info-section li {
+  margin-bottom: var(--spacing-sm);
+  color: var(--gray-700);
+}

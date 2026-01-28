@@ -1,0 +1,56 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Gestion Académique</h1>
+      <p class="page-subtitle">Gérer tous les paramètres académiques de l'institution</p>
+    </div>
+  </div>
+
+  <div class="current-year-card" *ngIf="currentAcademicYear">
+    <div class="current-year-header">
+      <h3>📅 Année Académique Courante</h3>
+    </div>
+    <div class="current-year-body">
+      <div class="year-info">
+        <span class="year-name">{{ currentAcademicYear.name }}</span>
+        <span class="year-code">{{ currentAcademicYear.code }}</span>
+      </div>
+      <div class="year-dates">
+        <span>{{ currentAcademicYear.startDate | date:'dd/MM/yyyy' }} - {{ currentAcademicYear.endDate | date:'dd/MM/yyyy' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="management-grid">
+    <div *ngFor="let section of managementSections" class="management-card" [routerLink]="section.route">
+      <div class="card-icon" [ngClass]="'bg-' + section.color">
+        {{ section.icon }}
+      </div>
+      <div class="card-content">
+        <h3 class="card-title">{{ section.title }}</h3>
+        <p class="card-description">{{ section.description }}</p>
+      </div>
+      <div class="card-arrow">→</div>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">ℹ️ Informations</h3>
+      </div>
+      <div class="card-body">
+        <p>La gestion académique permet de configurer tous les paramètres nécessaires au bon fonctionnement du système d'examens :</p>
+        <ul>
+          <li><strong>Années Académiques</strong> : Définir les périodes d'enseignement</li>
+          <li><strong>Semestres</strong> : Organiser l'année en périodes d'évaluation</li>
+          <li><strong>Départements</strong> : Structurer l'organisation académique</li>
+          <li><strong>Programmes</strong> : Définir les filières d'enseignement</li>
+          <li><strong>Niveaux</strong> : Configurer les années d'études</li>
+          <li><strong>Classes</strong> : Organiser les groupes d'étudiants</li>
+          <li><strong>UE/ECUE</strong> : Structurer les enseignements et matières</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
