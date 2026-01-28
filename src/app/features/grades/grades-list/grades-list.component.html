@@ -1,0 +1,180 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Gestion des Notes</h1>
+      <p class="page-subtitle">{{ totalGrades }} note(s) au total</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/grades/create">
+      + Saisir une note
+    </button>
+  </div>
+
+  <div class="card filters-card">
+    <div class="filters-grid">
+      <div class="form-group">
+        <label for="status">Statut</label>
+        <select id="status" [(ngModel)]="selectedStatus" (change)="onFilterChange()">
+          <option value="">Tous les statuts</option>
+          <option *ngFor="let status of statuses" [value]="status">
+            {{ gradeService.getStatusLabel(status) }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <div class="btn-group">
+          <button class="btn btn-primary" (click)="loadGrades()">
+            🔍 Rechercher
+          </button>
+          <button class="btn btn-outline" (click)="clearFilters()">
+            ✕ Réinitialiser
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Chargement des notes...</p>
+  </div>
+
+  <div class="card" *ngIf="!loading">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Étudiant</th>
+            <th>ECUE</th>
+            <th>Semestre</th>
+            <th>CC1</th>
+            <th>CC2</th>
+            <th>CC</th>
+            <th>Examen</th>
+            <th>Note Finale</th>
+            <th>Mention</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let grade of grades">
+            <td>
+              <strong>{{ grade.student?.fullName || 'N/A' }}</strong><br>
+              <small class="text-muted">{{ grade.student?.matricule }}</small>
+            </td>
+            <td>
+              <strong>{{ grade.ecue?.name || 'N/A' }}</strong><br>
+              <small class="text-muted">{{ grade.ecue?.code }}</small>
+            </td>
+            <td>{{ grade.semester?.name || 'N/A' }}</td>
+            <td>
+              <span *ngIf="!grade.isAbsentCC1">{{ grade.gradeCC1 !== null ? grade.gradeCC1 : '-' }}</span>
+              <span *ngIf="grade.isAbsentCC1" class="text-error">ABS</span>
+            </td>
+            <td>
+              <span *ngIf="!grade.isAbsentCC2">{{ grade.gradeCC2 !== null ? grade.gradeCC2 : '-' }}</span>
+              <span *ngIf="grade.isAbsentCC2" class="text-error">ABS</span>
+            </td>
+            <td><strong>{{ grade.gradeCC !== null ? grade.gradeCC : '-' }}</strong></td>
+            <td><strong>{{ grade.gradeExam !== null ? grade.gradeExam : '-' }}</strong></td>
+            <td>
+              <strong [ngClass]="gradeService.getGradeColorClass(grade.gradeFinal)">
+                {{ grade.gradeFinal !== null ? grade.gradeFinal.toFixed(2) : '-' }}
+              </strong>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="gradeService.isPassed(grade.gradeFinal) ? 'badge-success' : 'badge-error'">
+                {{ gradeService.getMention(grade.gradeFinal) }}
+              </span>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="gradeService.getStatusBadgeClass(grade.status)">
+                {{ gradeService.getStatusLabel(grade.status) }}
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <button 
+                  class="btn btn-sm btn-outline" 
+                  [routerLink]="['/grades', grade.id]"
+                  title="Voir les détails">
+                  👁️
+                </button>
+                <button 
+                  class="btn btn-sm btn-outline" 
+                  [routerLink]="['/grades', grade.id, 'edit']"
+                  *ngIf="grade.status === 'DRAFT' || grade.status === 'REJECTED'"
+                  title="Modifier">
+                  ✏️
+                </button>
+                <button 
+                  class="btn btn-sm btn-info" 
+                  (click)="submitGrade(grade)"
+                  *ngIf="grade.status === 'DRAFT'"
+                  title="Soumettre">
+                  📤
+                </button>
+                <button 
+                  class="btn btn-sm btn-error" 
+                  (click)="deleteGrade(grade)"
+                  *ngIf="grade.status === 'DRAFT'"
+                  title="Supprimer">
+                  🗑️
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="grades.length === 0">
+            <td colspan="11" class="text-center">
+              <div class="empty-state">
+                <p>Aucune note trouvée</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button 
+        class="btn btn-sm btn-outline" 
+        [disabled]="currentPage === 1"
+        (click)="goToPage(1)">
+        ⏮️ Première
+      </button>
+      <button 
+        class="btn btn-sm btn-outline" 
+        [disabled]="currentPage === 1"
+        (click)="goToPage(currentPage - 1)">
+        ◀️ Précédent
+      </button>
+      
+      <button 
+        *ngFor="let page of paginationPages"
+        class="btn btn-sm"
+        [ngClass]="page === currentPage ? 'btn-primary' : 'btn-outline'"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+      
+      <button 
+        class="btn btn-sm btn-outline" 
+        [disabled]="currentPage === totalPages"
+        (click)="goToPage(currentPage + 1)">
+        Suivant ▶️
+      </button>
+      <button 
+        class="btn btn-sm btn-outline" 
+        [disabled]="currentPage === totalPages"
+        (click)="goToPage(totalPages)">
+        Dernière ⏭️
+      </button>
+    </div>
+  </div>
+</div>

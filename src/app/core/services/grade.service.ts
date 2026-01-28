@@ -73,4 +73,71 @@ export class GradeService {
     getGradeHistory(id: number): Observable<ApiResponse<any[]>> {
         return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/${id}/history`);
     }
+
+    /**
+     * Get all grade statuses
+     */
+    getStatuses(): string[] {
+        return ['DRAFT', 'SUBMITTED', 'VALIDATED_PEDAGOGICAL', 'VALIDATED_ADMINISTRATIVE', 'REJECTED'];
+    }
+
+    /**
+     * Get status label
+     */
+    getStatusLabel(status: string): string {
+        const labels: { [key: string]: string } = {
+            'DRAFT': 'Brouillon',
+            'SUBMITTED': 'Soumis',
+            'VALIDATED_PEDAGOGICAL': 'Validé (Pédagogique)',
+            'VALIDATED_ADMINISTRATIVE': 'Validé (Administratif)',
+            'REJECTED': 'Rejeté'
+        };
+        return labels[status] || status;
+    }
+
+    /**
+     * Get status badge class
+     */
+    getStatusBadgeClass(status: string): string {
+        const classes: { [key: string]: string } = {
+            'DRAFT': 'badge-secondary',
+            'SUBMITTED': 'badge-info',
+            'VALIDATED_PEDAGOGICAL': 'badge-warning',
+            'VALIDATED_ADMINISTRATIVE': 'badge-success',
+            'REJECTED': 'badge-error'
+        };
+        return classes[status] || 'badge-secondary';
+    }
+
+    /**
+     * Calculate if student passed
+     */
+    isPassed(finalGrade: number | null): boolean {
+        if (finalGrade === null) return false;
+        return finalGrade >= 10;
+    }
+
+    /**
+     * Get grade color class
+     */
+    getGradeColorClass(finalGrade: number | null): string {
+        if (finalGrade === null) return 'text-gray-500';
+        if (finalGrade >= 16) return 'text-success-600';
+        if (finalGrade >= 14) return 'text-success-500';
+        if (finalGrade >= 12) return 'text-info-600';
+        if (finalGrade >= 10) return 'text-warning-600';
+        return 'text-error-600';
+    }
+
+    /**
+     * Get mention based on final grade
+     */
+    getMention(finalGrade: number | null): string {
+        if (finalGrade === null) return 'N/A';
+        if (finalGrade >= 16) return 'Très Bien';
+        if (finalGrade >= 14) return 'Bien';
+        if (finalGrade >= 12) return 'Assez Bien';
+        if (finalGrade >= 10) return 'Passable';
+        return 'Échec';
+    }
 }

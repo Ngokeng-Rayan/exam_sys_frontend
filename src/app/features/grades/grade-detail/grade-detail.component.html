@@ -1,0 +1,108 @@
+<div class="page-container">
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Chargement des détails...</p>
+  </div>
+
+  <div class="alert alert-error" *ngIf="error">{{ error }}</div>
+
+  <div *ngIf="!loading && grade">
+    <div class="page-header">
+      <div>
+        <h1>Détails de la note</h1>
+        <p class="page-subtitle">{{ grade.student?.fullName }} - {{ grade.ecue?.name }}</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-outline" routerLink="/grades">← Retour à la liste</button>
+        <button class="btn btn-primary" [routerLink]="['/grades', grade.id, 'edit']" *ngIf="grade.status === 'DRAFT' || grade.status === 'REJECTED'">✏️ Modifier</button>
+      </div>
+    </div>
+
+    <div class="status-section">
+      <span class="badge badge-lg" [ngClass]="gradeService.getStatusBadgeClass(grade.status)">
+        {{ gradeService.getStatusLabel(grade.status) }}
+      </span>
+      <span class="badge badge-lg" [ngClass]="gradeService.isPassed(grade.gradeFinal) ? 'badge-success' : 'badge-error'">
+        {{ gradeService.getMention(grade.gradeFinal) }}
+      </span>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Informations générales</h3></div>
+      <div class="card-body">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Étudiant</span>
+            <span class="info-value">{{ grade.student?.fullName }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Matricule</span>
+            <span class="info-value">{{ grade.student?.matricule }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">ECUE</span>
+            <span class="info-value">{{ grade.ecue?.name }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Code ECUE</span>
+            <span class="info-value">{{ grade.ecue?.code }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Semestre</span>
+            <span class="info-value">{{ grade.semester?.name }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Année académique</span>
+            <span class="info-value">{{ grade.academicYear?.name }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Notes</h3></div>
+      <div class="card-body">
+        <div class="grades-grid">
+          <div class="grade-item">
+            <span class="grade-label">CC1</span>
+            <span class="grade-value" *ngIf="!grade.isAbsentCC1">{{ grade.gradeCC1 !== null ? grade.gradeCC1 : '-' }}</span>
+            <span class="grade-value text-error" *ngIf="grade.isAbsentCC1">ABSENT</span>
+          </div>
+          <div class="grade-item">
+            <span class="grade-label">CC2</span>
+            <span class="grade-value" *ngIf="!grade.isAbsentCC2">{{ grade.gradeCC2 !== null ? grade.gradeCC2 : '-' }}</span>
+            <span class="grade-value text-error" *ngIf="grade.isAbsentCC2">ABSENT</span>
+          </div>
+          <div class="grade-item">
+            <span class="grade-label">Moyenne CC</span>
+            <span class="grade-value"><strong>{{ grade.gradeCC !== null ? grade.gradeCC : '-' }}</strong></span>
+          </div>
+          <div class="grade-item">
+            <span class="grade-label">Examen</span>
+            <span class="grade-value"><strong>{{ grade.gradeExam !== null ? grade.gradeExam : '-' }}</strong></span>
+          </div>
+          <div class="grade-item highlight">
+            <span class="grade-label">Note Finale</span>
+            <span class="grade-value" [ngClass]="gradeService.getGradeColorClass(grade.gradeFinal)">
+              <strong>{{ grade.gradeFinal !== null ? grade.gradeFinal.toFixed(2) : '-' }} / 20</strong>
+            </span>
+          </div>
+        </div>
+        <div class="comment-section" *ngIf="grade.teacherComment">
+          <strong>Commentaire :</strong> {{ grade.teacherComment }}
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Actions</h3></div>
+      <div class="card-body">
+        <div class="actions-grid">
+          <button class="btn btn-outline w-full" [routerLink]="['/grades', grade.id, 'edit']" *ngIf="grade.status === 'DRAFT' || grade.status === 'REJECTED'">✏️ Modifier</button>
+          <button class="btn btn-info w-full" (click)="submitGrade()" *ngIf="grade.status === 'DRAFT'">📤 Soumettre pour validation</button>
+          <button class="btn btn-error w-full" (click)="deleteGrade()" *ngIf="grade.status === 'DRAFT'">🗑️ Supprimer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

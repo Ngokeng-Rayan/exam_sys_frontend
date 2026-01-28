@@ -12,5 +12,9 @@ export const GRADES_ROUTES: Routes = [
     {
         path: ':id',
         loadComponent: () => import('./grade-detail/grade-detail.component').then(m => m.GradeDetailComponent)
+    },
+    {
+        path: ':id/edit',
+        loadComponent: () => import('./grade-form/grade-form.component').then(m => m.GradeFormComponent)
     }
 ];
