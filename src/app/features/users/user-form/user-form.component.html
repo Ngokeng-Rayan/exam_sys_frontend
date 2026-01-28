@@ -1,0 +1,167 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>{{ isEditMode ? 'Modifier l\'utilisateur' : 'Créer un utilisateur' }}</h1>
+  </div>
+
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div class="card">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        <!-- Matricule -->
+        <div class="form-group">
+          <label for="matricule">Matricule <span class="required">*</span></label>
+          <input
+            type="text"
+            id="matricule"
+            formControlName="matricule"
+            placeholder="MAT12345"
+            [class.error]="matricule?.invalid && matricule?.touched"
+          />
+          <span class="error" *ngIf="matricule?.invalid && matricule?.touched">
+            <span *ngIf="matricule?.errors?.['required']">Le matricule est requis</span>
+          </span>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email <span class="required">*</span></label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            placeholder="utilisateur@example.com"
+            [class.error]="email?.invalid && email?.touched"
+          />
+          <span class="error" *ngIf="email?.invalid && email?.touched">
+            <span *ngIf="email?.errors?.['required']">L'email est requis</span>
+            <span *ngIf="email?.errors?.['email']">Email invalide</span>
+          </span>
+        </div>
+
+        <!-- Prénom -->
+        <div class="form-group">
+          <label for="firstName">Prénom <span class="required">*</span></label>
+          <input
+            type="text"
+            id="firstName"
+            formControlName="firstName"
+            placeholder="Jean"
+            [class.error]="firstName?.invalid && firstName?.touched"
+          />
+          <span class="error" *ngIf="firstName?.invalid && firstName?.touched">
+            Le prénom est requis
+          </span>
+        </div>
+
+        <!-- Nom -->
+        <div class="form-group">
+          <label for="lastName">Nom <span class="required">*</span></label>
+          <input
+            type="text"
+            id="lastName"
+            formControlName="lastName"
+            placeholder="Dupont"
+            [class.error]="lastName?.invalid && lastName?.touched"
+          />
+          <span class="error" *ngIf="lastName?.invalid && lastName?.touched">
+            Le nom est requis
+          </span>
+        </div>
+
+        <!-- Genre -->
+        <div class="form-group">
+          <label for="gender">Genre <span class="required">*</span></label>
+          <select id="gender" formControlName="gender">
+            <option value="M">Masculin</option>
+            <option value="F">Féminin</option>
+          </select>
+        </div>
+
+        <!-- Rôle -->
+        <div class="form-group">
+          <label for="role">Rôle <span class="required">*</span></label>
+          <select id="role" formControlName="role">
+            <option *ngFor="let r of roles" [value]="r">
+              {{ userService.getRoleLabel(r) }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Statut -->
+        <div class="form-group">
+          <label for="status">Statut <span class="required">*</span></label>
+          <select id="status" formControlName="status">
+            <option *ngFor="let s of statuses" [value]="s">
+              {{ userService.getStatusLabel(s) }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Mot de passe section -->
+      <div class="form-section">
+        <h3>{{ isEditMode ? 'Modifier le mot de passe (optionnel)' : 'Mot de passe' }}</h3>
+        <div class="form-grid">
+          <!-- Mot de passe -->
+          <div class="form-group">
+            <label for="password">
+              Mot de passe 
+              <span class="required" *ngIf="!isEditMode">*</span>
+            </label>
+            <input
+              type="password"
+              id="password"
+              formControlName="password"
+              placeholder="••••••••"
+              [class.error]="password?.invalid && password?.touched"
+            />
+            <span class="error" *ngIf="password?.invalid && password?.touched">
+              <span *ngIf="password?.errors?.['required']">Le mot de passe est requis</span>
+              <span *ngIf="password?.errors?.['minlength']">Minimum 6 caractères</span>
+            </span>
+          </div>
+
+          <!-- Confirmation mot de passe -->
+          <div class="form-group">
+            <label for="confirmPassword">
+              Confirmer le mot de passe 
+              <span class="required" *ngIf="!isEditMode">*</span>
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              formControlName="confirmPassword"
+              placeholder="••••••••"
+              [class.error]="confirmPassword?.invalid && confirmPassword?.touched"
+            />
+            <span class="error" *ngIf="confirmPassword?.invalid && confirmPassword?.touched">
+              <span *ngIf="confirmPassword?.errors?.['required']">La confirmation est requise</span>
+              <span *ngIf="confirmPassword?.errors?.['passwordMismatch']">
+                Les mots de passe ne correspondent pas
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" routerLink="/users">
+          Annuler
+        </button>
+        <button 
+          type="submit" 
+          class="btn btn-primary" 
+          [disabled]="loading || userForm.invalid">
+          <span *ngIf="!loading">
+            {{ isEditMode ? 'Modifier' : 'Créer' }}
+          </span>
+          <span *ngIf="loading" class="loading-spinner"></span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

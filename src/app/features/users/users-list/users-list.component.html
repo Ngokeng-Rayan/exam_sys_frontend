@@ -1,0 +1,187 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Gestion des Utilisateurs</h1>
+      <p class="page-subtitle">{{ totalUsers }} utilisateur(s) au total</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/users/create">
+      + Créer un utilisateur
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="card filters-card">
+    <div class="filters-grid">
+      <div class="form-group">
+        <label for="search">Rechercher</label>
+        <input
+          type="text"
+          id="search"
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="onSearch()"
+          placeholder="Nom, email, matricule..."
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="role">Rôle</label>
+        <select id="role" [(ngModel)]="selectedRole" (change)="onFilterChange()">
+          <option value="">Tous les rôles</option>
+          <option *ngFor="let role of roles" [value]="role">
+            {{ userService.getRoleLabel(role) }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="status">Statut</label>
+        <select id="status" [(ngModel)]="selectedStatus" (change)="onFilterChange()">
+          <option value="">Tous les statuts</option>
+          <option *ngFor="let status of statuses" [value]="status">
+            {{ userService.getStatusLabel(status) }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <div class="btn-group">
+          <button class="btn btn-primary" (click)="onSearch()">
+            🔍 Rechercher
+          </button>
+          <button class="btn btn-outline" (click)="clearFilters()">
+            ✕ Réinitialiser
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Chargement des utilisateurs...</p>
+  </div>
+
+  <!-- Users Table -->
+  <div class="card" *ngIf="!loading">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Matricule</th>
+            <th>Nom complet</th>
+            <th>Email</th>
+            <th>Rôle</th>
+            <th>Statut</th>
+            <th>Date création</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of users">
+            <td><strong>{{ user.matricule }}</strong></td>
+            <td>{{ user.fullName }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+              <span class="badge badge-info">
+                {{ userService.getRoleLabel(user.role) }}
+              </span>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="userService.getStatusBadgeClass(user.status)">
+                {{ userService.getStatusLabel(user.status) }}
+              </span>
+            </td>
+            <td>{{ user.createdAt | date:'dd/MM/yyyy' }}</td>
+            <td>
+              <div class="action-buttons">
+                <button 
+                  class="btn btn-sm btn-outline" 
+                  [routerLink]="['/users', user.id]"
+                  title="Voir les détails">
+                  👁️
+                </button>
+                <button 
+                  class="btn btn-sm btn-outline" 
+                  [routerLink]="['/users', user.id, 'edit']"
+                  title="Modifier">
+                  ✏️
+                </button>
+                <button 
+                  *ngIf="user.status !== 'ACTIVE'"
+                  class="btn btn-sm btn-success" 
+                  (click)="activateUser(user)"
+                  title="Activer">
+                  ✓
+                </button>
+                <button 
+                  *ngIf="user.status === 'ACTIVE'"
+                  class="btn btn-sm btn-warning" 
+                  (click)="deactivateUser(user)"
+                  title="Désactiver">
+                  ⊘
+                </button>
+                <button 
+                  class="btn btn-sm btn-error" 
+                  (click)="deleteUser(user)"
+                  title="Supprimer">
+                  🗑️
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="users.length === 0">
+            <td colspan="7" class="text-center">
+              <div class="empty-state">
+                <p>Aucun utilisateur trouvé</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button 
+        class="btn btn-sm btn-outline" 
+        [disabled]="currentPage === 1"
+        (click)="goToPage(1)">
+        ⏮️ Première
+      </button>
+      <button 
+        class="btn btn-sm btn-outline" 
+        [disabled]="currentPage === 1"
+        (click)="goToPage(currentPage - 1)">
+        ◀️ Précédent
+      </button>
+      
+      <button 
+        *ngFor="let page of paginationPages"
+        class="btn btn-sm"
+        [ngClass]="page === currentPage ? 'btn-primary' : 'btn-outline'"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+      
+      <button 
+        class="btn btn-sm btn-outline" 
+        [disabled]="currentPage === totalPages"
+        (click)="goToPage(currentPage + 1)">
+        Suivant ▶️
+      </button>
+      <button 
+        class="btn btn-sm btn-outline" 
+        [disabled]="currentPage === totalPages"
+        (click)="goToPage(totalPages)">
+        Dernière ⏭️
+      </button>
+    </div>
+  </div>
+</div>
