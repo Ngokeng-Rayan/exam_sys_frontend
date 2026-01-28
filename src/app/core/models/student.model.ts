@@ -15,6 +15,7 @@ export interface Student {
     programName?: string;
     levelCode?: string;
     levelId?: number;
+    departmentId?: number;
     classId?: number;
     promotion?: string;
     createdAt: string;
@@ -39,6 +40,7 @@ export interface StudentCreateRequest {
     programName?: string;
     levelCode?: string;
     levelId?: number;
+    departmentId?: number;
     classId?: number;
     promotion?: string;
 }
