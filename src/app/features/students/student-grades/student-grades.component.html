@@ -1,0 +1,64 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Notes de l'étudiant</h1>
+      <p class="page-subtitle" *ngIf="student">{{ student.fullName }} - {{ student.matricule }}</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline" [routerLink]="['/students', studentId]">
+        ← Retour aux détails
+      </button>
+      <button class="btn btn-outline" routerLink="/students">
+        Liste des étudiants
+      </button>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Chargement des notes...</p>
+  </div>
+
+  <!-- Grades List -->
+  <div class="card" *ngIf="!loading">
+    <div *ngIf="grades.length === 0" class="empty-state">
+      <p>📝 Aucune note disponible pour cet étudiant</p>
+      <p class="text-muted">Les notes apparaîtront ici une fois qu'elles seront saisies par les enseignants.</p>
+    </div>
+
+    <div *ngIf="grades.length > 0" class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Matière</th>
+            <th>Semestre</th>
+            <th>CC</th>
+            <th>Examen</th>
+            <th>Note finale</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let grade of grades">
+            <td>{{ grade.courseName || 'N/A' }}</td>
+            <td>{{ grade.semester || 'N/A' }}</td>
+            <td>{{ grade.cc || '-' }}</td>
+            <td>{{ grade.exam || '-' }}</td>
+            <td><strong>{{ grade.final || '-' }}</strong></td>
+            <td>
+              <span class="badge" [ngClass]="grade.passed ? 'badge-success' : 'badge-error'">
+                {{ grade.passed ? 'Validé' : 'Non validé' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,173 @@
+<div class="page-container">
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Chargement des détails...</p>
+  </div>
+
+  <!-- Error -->
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <!-- Student Details -->
+  <div *ngIf="!loading && student">
+    <div class="page-header">
+      <div>
+        <h1>{{ student.fullName }}</h1>
+        <p class="page-subtitle">{{ student.matricule }}</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-outline" routerLink="/students">
+          ← Retour à la liste
+        </button>
+        <button class="btn btn-primary" [routerLink]="['/students', student.id, 'edit']">
+          ✏️ Modifier
+        </button>
+      </div>
+    </div>
+
+    <!-- Status Badges -->
+    <div class="status-section">
+      <span class="badge badge-lg" [ngClass]="studentService.getStatusBadgeClass(student.studentStatus)">
+        {{ studentService.getStatusLabel(student.studentStatus) }}
+      </span>
+      <span class="badge badge-lg" [ngClass]="studentService.getRegimeBadgeClass(student.regime)">
+        {{ studentService.getRegimeLabel(student.regime) }}
+      </span>
+    </div>
+
+    <!-- Personal Information Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Informations personnelles</h3>
+      </div>
+      <div class="card-body">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Matricule</span>
+            <span class="info-value">{{ student.matricule }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Email</span>
+            <span class="info-value">{{ student.email }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Prénom</span>
+            <span class="info-value">{{ student.firstName }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Nom</span>
+            <span class="info-value">{{ student.lastName }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Genre</span>
+            <span class="info-value">{{ student.gender === 'M' ? 'Masculin' : 'Féminin' }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="student.dateOfBirth">
+            <span class="info-label">Date de naissance</span>
+            <span class="info-value">{{ student.dateOfBirth | date:'dd/MM/yyyy' }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="student.phone">
+            <span class="info-label">Téléphone</span>
+            <span class="info-value">{{ student.phone }}</span>
+          </div>
+
+          <div class="info-item full-width" *ngIf="student.address">
+            <span class="info-label">Adresse</span>
+            <span class="info-value">{{ student.address }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Academic Information Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Informations académiques</h3>
+      </div>
+      <div class="card-body">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Statut</span>
+            <span class="info-value">
+              <span class="badge" [ngClass]="studentService.getStatusBadgeClass(student.studentStatus)">
+                {{ studentService.getStatusLabel(student.studentStatus) }}
+              </span>
+            </span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Régime</span>
+            <span class="info-value">
+              <span class="badge" [ngClass]="studentService.getRegimeBadgeClass(student.regime)">
+                {{ studentService.getRegimeLabel(student.regime) }}
+              </span>
+            </span>
+          </div>
+
+          <div class="info-item" *ngIf="student.programName">
+            <span class="info-label">Programme</span>
+            <span class="info-value">{{ student.programName }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="student.levelCode">
+            <span class="info-label">Niveau</span>
+            <span class="info-value">{{ student.levelCode }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="student.promotion">
+            <span class="info-label">Promotion</span>
+            <span class="info-value">{{ student.promotion }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Date d'inscription</span>
+            <span class="info-value">{{ student.createdAt | date:'dd/MM/yyyy à HH:mm' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions Card -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Actions</h3>
+      </div>
+      <div class="card-body">
+        <div class="actions-grid">
+          <button 
+            class="btn btn-outline w-full"
+            [routerLink]="['/students', student.id, 'edit']">
+            ✏️ Modifier les informations
+          </button>
+
+          <button 
+            class="btn btn-info w-full"
+            [routerLink]="['/students', student.id, 'grades']">
+            📝 Voir les notes
+          </button>
+
+          <button 
+            class="btn btn-success w-full"
+            [routerLink]="['/results']"
+            [queryParams]="{studentId: student.id}">
+            📊 Voir les résultats
+          </button>
+
+          <button 
+            class="btn btn-error w-full"
+            (click)="deleteStudent()">
+            🗑️ Supprimer l'étudiant
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
