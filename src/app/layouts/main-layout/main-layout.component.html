@@ -1,0 +1,52 @@
+<div class="main-layout">
+  <aside class="sidebar" [class.sidebar-closed]="!sidebarOpen">
+    <div class="sidebar-header">
+      <h2 class="sidebar-title">{{ sidebarOpen ? 'Exam System' : 'ES' }}</h2>
+      <button class="sidebar-toggle" (click)="toggleSidebar()">
+        {{ sidebarOpen ? '◀' : '▶' }}
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a
+        *ngFor="let item of menuItems"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        class="nav-item"
+        [class.hidden]="!canShowMenuItem(item)"
+      >
+        <span class="nav-icon">{{ item.icon }}</span>
+        <span class="nav-label" *ngIf="sidebarOpen">{{ item.label }}</span>
+      </a>
+    </nav>
+  </aside>
+
+  <div class="main-content">
+    <header class="header">
+      <div class="header-left">
+        <h1 class="page-title">Système de Gestion des Examens</h1>
+      </div>
+
+      <div class="header-right">
+        <button class="notification-btn">
+          🔔
+          <span class="badge badge-error" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+        </button>
+
+        <div class="user-menu">
+          <div class="user-info">
+            <span class="user-name">{{ currentUser?.fullName }}</span>
+            <span class="user-role badge badge-primary">{{ currentUser?.role }}</span>
+          </div>
+          <button class="btn btn-sm btn-outline" (click)="logout()">
+            Déconnexion
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
