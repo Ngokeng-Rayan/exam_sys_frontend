@@ -1,0 +1,154 @@
+<div class="page-container">
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Chargement des détails...</p>
+  </div>
+
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && teacher">
+    <div class="page-header">
+      <div>
+        <h1>{{ teacher.fullName }}</h1>
+        <p class="page-subtitle">{{ teacher.matricule }}</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-outline" routerLink="/teachers">
+          ← Retour à la liste
+        </button>
+        <button class="btn btn-primary" [routerLink]="['/teachers', teacher.id, 'edit']">
+          ✏️ Modifier
+        </button>
+      </div>
+    </div>
+
+    <div class="status-section">
+      <span class="badge badge-lg" [ngClass]="teacherService.getGradeBadgeClass(teacher.grade)">
+        {{ teacherService.getGradeLabel(teacher.grade) }}
+      </span>
+      <span class="badge badge-lg" [ngClass]="teacherService.getTeacherTypeBadgeClass(teacher.teacherType)">
+        {{ teacherService.getTeacherTypeLabel(teacher.teacherType) }}
+      </span>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Informations personnelles</h3>
+      </div>
+      <div class="card-body">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Matricule</span>
+            <span class="info-value">{{ teacher.matricule }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Email</span>
+            <span class="info-value">{{ teacher.email }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Prénom</span>
+            <span class="info-value">{{ teacher.firstName }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Nom</span>
+            <span class="info-value">{{ teacher.lastName }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Genre</span>
+            <span class="info-value">{{ teacher.gender === 'M' ? 'Masculin' : 'Féminin' }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="teacher.dateOfBirth">
+            <span class="info-label">Date de naissance</span>
+            <span class="info-value">{{ teacher.dateOfBirth | date:'dd/MM/yyyy' }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="teacher.phone">
+            <span class="info-label">Téléphone</span>
+            <span class="info-value">{{ teacher.phone }}</span>
+          </div>
+
+          <div class="info-item full-width" *ngIf="teacher.address">
+            <span class="info-label">Adresse</span>
+            <span class="info-value">{{ teacher.address }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Informations professionnelles</h3>
+      </div>
+      <div class="card-body">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Grade</span>
+            <span class="info-value">
+              <span class="badge" [ngClass]="teacherService.getGradeBadgeClass(teacher.grade)">
+                {{ teacherService.getGradeLabel(teacher.grade) }}
+              </span>
+            </span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Type</span>
+            <span class="info-value">
+              <span class="badge" [ngClass]="teacherService.getTeacherTypeBadgeClass(teacher.teacherType)">
+                {{ teacherService.getTeacherTypeLabel(teacher.teacherType) }}
+              </span>
+            </span>
+          </div>
+
+          <div class="info-item" *ngIf="teacher.specialty">
+            <span class="info-label">Spécialité</span>
+            <span class="info-value">{{ teacher.specialty }}</span>
+          </div>
+
+          <div class="info-item" *ngIf="teacher.departmentName">
+            <span class="info-label">Département</span>
+            <span class="info-value">{{ teacher.departmentName }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="info-label">Date d'inscription</span>
+            <span class="info-value">{{ teacher.createdAt | date:'dd/MM/yyyy à HH:mm' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Actions</h3>
+      </div>
+      <div class="card-body">
+        <div class="actions-grid">
+          <button 
+            class="btn btn-outline w-full"
+            [routerLink]="['/teachers', teacher.id, 'edit']">
+            ✏️ Modifier les informations
+          </button>
+
+          <button 
+            class="btn btn-info w-full"
+            [routerLink]="['/teachers', teacher.id, 'assignments']">
+            📚 Voir les affectations
+          </button>
+
+          <button 
+            class="btn btn-error w-full"
+            (click)="deleteTeacher()">
+            🗑️ Supprimer l'enseignant
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

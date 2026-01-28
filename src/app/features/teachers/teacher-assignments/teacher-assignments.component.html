@@ -1,0 +1,79 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Affectations de l'enseignant</h1>
+      <p class="page-subtitle" *ngIf="teacher">{{ teacher.fullName }} - {{ teacher.matricule }}</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline" [routerLink]="['/teachers', teacherId]">
+        ← Retour aux détails
+      </button>
+      <button class="btn btn-outline" routerLink="/teachers">
+        Liste des enseignants
+      </button>
+    </div>
+  </div>
+
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Chargement des affectations...</p>
+  </div>
+
+  <div class="card" *ngIf="!loading">
+    <div *ngIf="assignments.length === 0" class="empty-state">
+      <p>📚 Aucune affectation pour cet enseignant</p>
+      <p class="text-muted">Les affectations apparaîtront ici une fois qu'elles seront créées.</p>
+    </div>
+
+    <div *ngIf="assignments.length > 0" class="assignments-list">
+      <div class="assignment-card" *ngFor="let assignment of assignments">
+        <div class="assignment-header">
+          <div>
+            <h3 class="assignment-title">{{ assignment.courseUnit?.name || 'N/A' }}</h3>
+            <p class="assignment-code">{{ assignment.courseUnit?.code || 'N/A' }}</p>
+          </div>
+          <div class="assignment-badges">
+            <span class="badge badge-info">{{ assignment.assignmentType }}</span>
+            <span class="badge badge-success" *ngIf="assignment.isPrimary">Principal</span>
+          </div>
+        </div>
+
+        <div class="assignment-body">
+          <div class="assignment-info">
+            <div class="info-item">
+              <span class="info-label">Semestre</span>
+              <span class="info-value">{{ assignment.semester?.name || 'N/A' }}</span>
+            </div>
+
+            <div class="info-item">
+              <span class="info-label">Année académique</span>
+              <span class="info-value">{{ assignment.academicYear?.name || 'N/A' }}</span>
+            </div>
+
+            <div class="info-item" *ngIf="assignment.department">
+              <span class="info-label">Département</span>
+              <span class="info-value">{{ assignment.department.name }}</span>
+            </div>
+
+            <div class="info-item full-width" *ngIf="assignment.notes">
+              <span class="info-label">Notes</span>
+              <span class="info-value">{{ assignment.notes }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="assignment-footer">
+          <button 
+            class="btn btn-sm btn-error" 
+            (click)="removeAssignment(assignment)">
+            🗑️ Supprimer l'affectation
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

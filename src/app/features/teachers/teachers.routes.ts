@@ -16,5 +16,9 @@ export const TEACHERS_ROUTES: Routes = [
     {
         path: ':id/edit',
         loadComponent: () => import('./teacher-form/teacher-form.component').then(m => m.TeacherFormComponent)
+    },
+    {
+        path: ':id/assignments',
+        loadComponent: () => import('./teacher-assignments/teacher-assignments.component').then(m => m.TeacherAssignmentsComponent)
     }
 ];

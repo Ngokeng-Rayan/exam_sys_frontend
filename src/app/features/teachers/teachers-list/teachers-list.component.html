@@ -1,0 +1,183 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Gestion des Enseignants</h1>
+      <p class="page-subtitle">{{ totalTeachers }} enseignant(s) au total</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/teachers/create">
+      + Ajouter un enseignant
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="card filters-card">
+    <div class="filters-grid">
+      <div class="form-group">
+        <label for="search">Rechercher</label>
+        <input
+          type="text"
+          id="search"
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="onSearch()"
+          placeholder="Nom, email, matricule..."
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="grade">Grade</label>
+        <select id="grade" [(ngModel)]="selectedGrade" (change)="onFilterChange()">
+          <option value="">Tous les grades</option>
+          <option *ngFor="let grade of grades" [value]="grade">
+            {{ teacherService.getGradeLabel(grade) }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="type">Type</label>
+        <select id="type" [(ngModel)]="selectedType" (change)="onFilterChange()">
+          <option value="">Tous les types</option>
+          <option *ngFor="let type of teacherTypes" [value]="type">
+            {{ teacherService.getTeacherTypeLabel(type) }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <div class="btn-group">
+          <button class="btn btn-primary" (click)="onSearch()">
+            🔍 Rechercher
+          </button>
+          <button class="btn btn-outline" (click)="clearFilters()">
+            ✕ Réinitialiser
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Alert -->
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Chargement des enseignants...</p>
+  </div>
+
+  <!-- Teachers Table -->
+  <div class="card" *ngIf="!loading">
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Matricule</th>
+            <th>Nom complet</th>
+            <th>Email</th>
+            <th>Genre</th>
+            <th>Grade</th>
+            <th>Type</th>
+            <th>Spécialité</th>
+            <th>Département</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let teacher of teachers">
+            <td><strong>{{ teacher.matricule }}</strong></td>
+            <td>{{ teacher.fullName }}</td>
+            <td>{{ teacher.email }}</td>
+            <td>{{ teacher.gender === 'M' ? 'M' : 'F' }}</td>
+            <td>
+              <span class="badge" [ngClass]="teacherService.getGradeBadgeClass(teacher.grade)">
+                {{ teacherService.getGradeLabel(teacher.grade) }}
+              </span>
+            </td>
+            <td>
+              <span class="badge" [ngClass]="teacherService.getTeacherTypeBadgeClass(teacher.teacherType)">
+                {{ teacherService.getTeacherTypeLabel(teacher.teacherType) }}
+              </span>
+            </td>
+            <td>{{ teacher.specialty || 'N/A' }}</td>
+            <td>{{ teacher.departmentName || 'N/A' }}</td>
+            <td>
+              <div class="action-buttons">
+                <button 
+                  class="btn btn-sm btn-outline" 
+                  [routerLink]="['/teachers', teacher.id]"
+                  title="Voir les détails">
+                  👁️
+                </button>
+                <button 
+                  class="btn btn-sm btn-outline" 
+                  [routerLink]="['/teachers', teacher.id, 'edit']"
+                  title="Modifier">
+                  ✏️
+                </button>
+                <button 
+                  class="btn btn-sm btn-info" 
+                  [routerLink]="['/teachers', teacher.id, 'assignments']"
+                  title="Voir les affectations">
+                  📚
+                </button>
+                <button 
+                  class="btn btn-sm btn-error" 
+                  (click)="deleteTeacher(teacher)"
+                  title="Supprimer">
+                  🗑️
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="teachers.length === 0">
+            <td colspan="9" class="text-center">
+              <div class="empty-state">
+                <p>Aucun enseignant trouvé</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalPages > 1">
+      <button 
+        class="btn btn-sm btn-outline" 
+        [disabled]="currentPage === 1"
+        (click)="goToPage(1)">
+        ⏮️ Première
+      </button>
+      <button 
+        class="btn btn-sm btn-outline" 
+        [disabled]="currentPage === 1"
+        (click)="goToPage(currentPage - 1)">
+        ◀️ Précédent
+      </button>
+      
+      <button 
+        *ngFor="let page of paginationPages"
+        class="btn btn-sm"
+        [ngClass]="page === currentPage ? 'btn-primary' : 'btn-outline'"
+        (click)="goToPage(page)">
+        {{ page }}
+      </button>
+      
+      <button 
+        class="btn btn-sm btn-outline" 
+        [disabled]="currentPage === totalPages"
+        (click)="goToPage(currentPage + 1)">
+        Suivant ▶️
+      </button>
+      <button 
+        class="btn btn-sm btn-outline" 
+        [disabled]="currentPage === totalPages"
+        (click)="goToPage(totalPages)">
+        Dernière ⏭️
+      </button>
+    </div>
+  </div>
+</div>
