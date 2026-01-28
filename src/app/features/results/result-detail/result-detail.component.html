@@ -1,0 +1,96 @@
+<div class="page-container">
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Chargement des détails...</p>
+  </div>
+
+  <div class="alert alert-error" *ngIf="error">{{ error }}</div>
+
+  <div *ngIf="!loading && result">
+    <div class="page-header">
+      <div>
+        <h1>Résultat Académique</h1>
+        <p class="page-subtitle">Étudiant ID: {{ result.studentId }} - Semestre {{ result.semesterId }}</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-outline" routerLink="/results">← Retour à la liste</button>
+      </div>
+    </div>
+
+    <div class="status-section">
+      <span class="badge badge-lg" [ngClass]="resultService.getStatusBadgeClass(result.status)">
+        {{ resultService.getStatusLabel(result.status) }}
+      </span>
+      <span class="badge badge-lg" [ngClass]="result.overallAverage >= 10 ? 'badge-success' : 'badge-error'">
+        {{ resultService.getMention(result.overallAverage) }}
+      </span>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Résumé</h3></div>
+      <div class="card-body">
+        <div class="summary-grid">
+          <div class="summary-item highlight">
+            <span class="summary-label">Moyenne Générale</span>
+            <span class="summary-value" [ngClass]="resultService.getAverageColorClass(result.overallAverage)">
+              {{ result.overallAverage !== null ? result.overallAverage.toFixed(2) : '-' }} / 20
+            </span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Rang</span>
+            <span class="summary-value">{{ result.rank }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Crédits Acquis</span>
+            <span class="summary-value">{{ result.acquiredCredits }} / {{ result.totalCredits }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="summary-label">Statut</span>
+            <span class="summary-value">
+              <span class="badge" [ngClass]="resultService.getStatusBadgeClass(result.status)">
+                {{ resultService.getStatusLabel(result.status) }}
+              </span>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="getSubjectAveragesArray().length > 0">
+      <div class="card-header"><h3 class="card-title">Moyennes par Matière</h3></div>
+      <div class="card-body">
+        <div class="subjects-grid">
+          <div class="subject-item" *ngFor="let subject of getSubjectAveragesArray()">
+            <span class="subject-code">{{ subject.code }}</span>
+            <span class="subject-average" [ngClass]="resultService.getAverageColorClass(subject.average)">
+              {{ subject.average.toFixed(2) }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="result.comments">
+      <div class="card-header"><h3 class="card-title">Commentaires</h3></div>
+      <div class="card-body">
+        <p>{{ result.comments }}</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Informations</h3></div>
+      <div class="card-body">
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="info-label">Calculé le</span>
+            <span class="info-value">{{ result.calculatedAt | date:'dd/MM/yyyy à HH:mm' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="info-label">Calculé par</span>
+            <span class="info-value">ID: {{ result.calculatedBy || 'N/A' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
