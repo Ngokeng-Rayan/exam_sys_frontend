@@ -1,16 +1,20 @@
-<div class="page-container">
-  <div class="page-header">
-    <div>
+<div class="modern-list-container">
+  <div class="list-header">
+    <div class="header-left">
       <h1>Gestion des Étudiants</h1>
-      <p class="page-subtitle">{{ totalStudents }} étudiant(s) au total</p>
+      <p class="header-subtitle">{{ totalStudents }} étudiant(s) inscrits dans le système</p>
     </div>
-    <button class="btn btn-primary" routerLink="/students/create">
-      + Ajouter un étudiant
-    </button>
+    <div class="header-actions">
+      <button class="btn-primary" routerLink="/students/create">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"/>
+        </svg>
+        Nouvel étudiant
+      </button>
+    </div>
   </div>
 
-  <!-- Filters -->
-  <div class="card filters-card">
+  <div class="filters-card">
     <div class="filters-grid">
       <div class="form-group">
         <label for="search">Rechercher</label>

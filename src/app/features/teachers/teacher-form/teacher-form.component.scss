@@ -1,7 +1,4 @@
-.page-container {
-  max-width: 1000px;
-  margin: 0 auto;
-}
+@import '../../../shared/styles/modern-forms';
 
 .page-header {
   margin-bottom: var(--spacing-xl);
@@ -9,7 +6,7 @@
 
 .form-section {
   margin-bottom: var(--spacing-xl);
-  
+
   &:not(:first-child) {
     padding-top: var(--spacing-xl);
     border-top: 1px solid var(--gray-200);

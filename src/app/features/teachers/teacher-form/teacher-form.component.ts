@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, ActivatedRoute, RouterModule } from '@angular/router';
 import { TeacherService } from '../../../core/services/teacher.service';
+import { ReferenceDataService } from '../../../core/services/reference-data.service';
+import { Department } from '../../../core/models';
 
 @Component({
     selector: 'app-teacher-form',
@@ -20,10 +22,13 @@ export class TeacherFormComponent implements OnInit {
 
     grades: string[] = [];
     teacherTypes: string[] = [];
+    departments: Department[] = [];
+    loadingData = false;
 
     constructor(
         private fb: FormBuilder,
         public teacherService: TeacherService,
+        public refDataService: ReferenceDataService,
         private router: Router,
         private route: ActivatedRoute
     ) {
@@ -38,9 +43,8 @@ export class TeacherFormComponent implements OnInit {
             address: [''],
             grade: ['LECTURER', [Validators.required]],
             specialty: [''],
-            teacherType: ['FULL_TIME', [Validators.required]],
-            departmentId: [''],
-            departmentName: ['']
+            teacherType: ['PERMANENT', [Validators.required]],
+            departmentId: ['', [Validators.required]]
         });
     }
 
@@ -48,12 +52,24 @@ export class TeacherFormComponent implements OnInit {
         this.grades = this.teacherService.getGrades();
         this.teacherTypes = this.teacherService.getTeacherTypes();
 
+        // Charger les départements
+        this.loadReferenceData();
+
         const id = this.route.snapshot.paramMap.get('id');
         if (id) {
             this.isEditMode = true;
             this.teacherId = parseInt(id, 10);
             this.loadTeacher();
         }
+    }
+
+    loadReferenceData() {
+        this.loadingData = true;
+        this.refDataService.loadDepartments();
+        this.refDataService.departments$.subscribe(depts => {
+            this.departments = depts;
+            this.loadingData = false;
+        });
     }
 
     loadTeacher() {
@@ -73,11 +89,10 @@ export class TeacherFormComponent implements OnInit {
                         dateOfBirth: teacher.dateOfBirth,
                         phone: teacher.phone,
                         address: teacher.address,
-                        grade: teacher.grade,
+                        grade: teacher.grade || 'LECTURER',
                         specialty: teacher.specialty,
-                        teacherType: teacher.teacherType,
-                        departmentId: teacher.departmentId,
-                        departmentName: teacher.departmentName
+                        teacherType: teacher.teacherType || 'PERMANENT',
+                        departmentId: teacher.departmentId
                     });
                 }
                 this.loading = false;

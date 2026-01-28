@@ -1,4 +1,6 @@
-.page-container {
+@import '../../../shared/styles/modern-tables';
+
+.page-container-old {
   max-width: 1600px;
   margin: 0 auto;
 }
@@ -38,7 +40,7 @@
   justify-content: center;
   padding: var(--spacing-2xl);
   gap: var(--spacing-md);
-  
+
   p {
     color: var(--gray-600);
   }

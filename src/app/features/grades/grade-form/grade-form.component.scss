@@ -1,5 +1,7 @@
-// Design moderne et professionnel pour le formulaire
-.modern-page-container {
+@import '../../../shared/styles/modern-forms';
+
+// Styles spécifiques au formulaire de notes si nécessaire
+.modern-page-container-old {
     max-width: 1200px;
     margin: 0 auto;
     padding: 2rem;

@@ -1,91 +1,114 @@
-<div class="page-container">
-  <div class="page-header">
-    <h1>{{ isEditMode ? 'Modifier l\'étudiant' : 'Ajouter un étudiant' }}</h1>
+<div class="modern-page-container">
+  <div class="modern-header">
+    <div class="header-content">
+      <button type="button" class="btn-back" routerLink="/students">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"/>
+        </svg>
+        Retour
+      </button>
+      <div class="header-title">
+        <h1>{{ isEditMode ? 'Modifier l\'étudiant' : 'Nouvel étudiant' }}</h1>
+        <p class="header-subtitle">{{ isEditMode ? 'Modifiez les informations de l\'étudiant' : 'Ajoutez un nouvel étudiant au système' }}</p>
+      </div>
+    </div>
   </div>
 
   <div class="alert alert-error" *ngIf="error">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"/>
+    </svg>
     {{ error }}
   </div>
 
-  <div class="card">
+  <div class="modern-card">
     <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
-      <!-- Informations personnelles -->
       <div class="form-section">
-        <h3>Informations personnelles</h3>
+        <div class="section-header">
+          <h3>👤 Informations personnelles</h3>
+          <p class="section-subtitle">Informations d'identification de l'étudiant</p>
+        </div>
         <div class="form-grid">
-          <!-- Matricule -->
           <div class="form-group">
-            <label for="matricule">Matricule <span class="required">*</span></label>
+            <label for="matricule" class="form-label">
+              <span class="label-text">Matricule</span>
+              <span class="label-required">*</span>
+            </label>
             <input
               type="text"
               id="matricule"
               formControlName="matricule"
               placeholder="ETU12345"
-              [class.error]="matricule?.invalid && matricule?.touched"
             />
-            <span class="error" *ngIf="matricule?.invalid && matricule?.touched">
-              Le matricule est requis
+            <span class="error-message" *ngIf="matricule?.invalid && matricule?.touched">
+              ⚠️ Le matricule est requis
             </span>
           </div>
 
-          <!-- Email -->
           <div class="form-group">
-            <label for="email">Email <span class="required">*</span></label>
+            <label for="email" class="form-label">
+              <span class="label-text">Email</span>
+              <span class="label-required">*</span>
+            </label>
             <input
               type="email"
               id="email"
               formControlName="email"
               placeholder="etudiant@example.com"
-              [class.error]="email?.invalid && email?.touched"
             />
-            <span class="error" *ngIf="email?.invalid && email?.touched">
-              <span *ngIf="email?.errors?.['required']">L'email est requis</span>
-              <span *ngIf="email?.errors?.['email']">Email invalide</span>
+            <span class="error-message" *ngIf="email?.invalid && email?.touched">
+              <span *ngIf="email?.errors?.['required']">⚠️ L'email est requis</span>
+              <span *ngIf="email?.errors?.['email']">⚠️ Email invalide</span>
             </span>
           </div>
 
-          <!-- Prénom -->
           <div class="form-group">
-            <label for="firstName">Prénom <span class="required">*</span></label>
+            <label for="firstName" class="form-label">
+              <span class="label-text">Prénom</span>
+              <span class="label-required">*</span>
+            </label>
             <input
               type="text"
               id="firstName"
               formControlName="firstName"
               placeholder="Jean"
-              [class.error]="firstName?.invalid && firstName?.touched"
             />
-            <span class="error" *ngIf="firstName?.invalid && firstName?.touched">
-              Le prénom est requis
+            <span class="error-message" *ngIf="firstName?.invalid && firstName?.touched">
+              ⚠️ Le prénom est requis
             </span>
           </div>
 
-          <!-- Nom -->
           <div class="form-group">
-            <label for="lastName">Nom <span class="required">*</span></label>
+            <label for="lastName" class="form-label">
+              <span class="label-text">Nom</span>
+              <span class="label-required">*</span>
+            </label>
             <input
               type="text"
               id="lastName"
               formControlName="lastName"
               placeholder="Dupont"
-              [class.error]="lastName?.invalid && lastName?.touched"
             />
-            <span class="error" *ngIf="lastName?.invalid && lastName?.touched">
-              Le nom est requis
+            <span class="error-message" *ngIf="lastName?.invalid && lastName?.touched">
+              ⚠️ Le nom est requis
             </span>
           </div>
 
-          <!-- Genre -->
           <div class="form-group">
-            <label for="gender">Genre <span class="required">*</span></label>
-            <select id="gender" formControlName="gender">
+            <label for="gender" class="form-label">
+              <span class="label-text">Genre</span>
+              <span class="label-required">*</span>
+            </label>
+            <select id="gender" formControlName="gender" class="form-select">
               <option value="M">Masculin</option>
               <option value="F">Féminin</option>
             </select>
           </div>
 
-          <!-- Date de naissance -->
           <div class="form-group">
-            <label for="dateOfBirth">Date de naissance</label>
+            <label for="dateOfBirth" class="form-label">
+              <span class="label-text">Date de naissance</span>
+            </label>
             <input
               type="date"
               id="dateOfBirth"
@@ -93,9 +116,10 @@
             />
           </div>
 
-          <!-- Téléphone -->
           <div class="form-group">
-            <label for="phone">Téléphone</label>
+            <label for="phone" class="form-label">
+              <span class="label-text">Téléphone</span>
+            </label>
             <input
               type="tel"
               id="phone"
@@ -104,9 +128,10 @@
             />
           </div>
 
-          <!-- Adresse -->
           <div class="form-group full-width">
-            <label for="address">Adresse</label>
+            <label for="address" class="form-label">
+              <span class="label-text">Adresse</span>
+            </label>
             <textarea
               id="address"
               formControlName="address"
@@ -117,77 +142,96 @@
         </div>
       </div>
 
-      <!-- Informations académiques -->
       <div class="form-section">
-        <h3>Informations académiques</h3>
+        <div class="section-header">
+          <h3>🎓 Informations académiques</h3>
+          <p class="section-subtitle">Parcours et affectation de l'étudiant</p>
+        </div>
         <div class="form-grid">
-          <!-- Statut -->
           <div class="form-group">
-            <label for="studentStatus">Statut <span class="required">*</span></label>
-            <select id="studentStatus" formControlName="studentStatus">
+            <label for="studentStatus" class="form-label">
+              <span class="label-text">Statut</span>
+              <span class="label-required">*</span>
+            </label>
+            <select id="studentStatus" formControlName="studentStatus" class="form-select">
               <option *ngFor="let status of statuses" [value]="status">
                 {{ studentService.getStatusLabel(status) }}
               </option>
             </select>
           </div>
 
-          <!-- Régime -->
           <div class="form-group">
-            <label for="regime">Régime <span class="required">*</span></label>
-            <select id="regime" formControlName="regime">
+            <label for="regime" class="form-label">
+              <span class="label-text">Régime</span>
+              <span class="label-required">*</span>
+            </label>
+            <select id="regime" formControlName="regime" class="form-select">
               <option *ngFor="let regime of regimes" [value]="regime">
                 {{ studentService.getRegimeLabel(regime) }}
               </option>
             </select>
           </div>
 
-          <!-- Programme ID -->
           <div class="form-group">
-            <label for="programId">ID Programme</label>
-            <input
-              type="text"
-              id="programId"
-              formControlName="programId"
-              placeholder="1"
-            />
+            <label for="departmentId" class="form-label">
+              <span class="label-text">Département</span>
+            </label>
+            <select id="departmentId" formControlName="departmentId" class="form-select" (change)="onDepartmentChange($any($event.target).value)" [class.loading]="loadingData">
+              <option value="">{{ loadingData ? 'Chargement...' : 'Sélectionnez un département' }}</option>
+              <option *ngFor="let dept of departments" [value]="dept.id">
+                {{ dept.code }} - {{ dept.name }}
+              </option>
+            </select>
           </div>
 
-          <!-- Programme Name -->
           <div class="form-group">
-            <label for="programName">Nom du programme</label>
-            <input
-              type="text"
-              id="programName"
-              formControlName="programName"
-              placeholder="Informatique"
-            />
+            <label for="programId" class="form-label">
+              <span class="label-text">Programme</span>
+              <span class="label-required">*</span>
+            </label>
+            <select id="programId" formControlName="programId" class="form-select" (change)="onProgramChange($any($event.target).value)" [class.loading]="loadingData">
+              <option value="">{{ loadingData ? 'Chargement...' : 'Sélectionnez un programme' }}</option>
+              <option *ngFor="let program of programs" [value]="program.id">
+                {{ program.code }} - {{ program.name }}
+              </option>
+            </select>
+            <span class="error-message" *ngIf="studentForm.get('programId')?.invalid && studentForm.get('programId')?.touched">
+              ⚠️ Veuillez sélectionner un programme
+            </span>
           </div>
 
-          <!-- Niveau Code -->
           <div class="form-group">
-            <label for="levelCode">Code niveau</label>
-            <input
-              type="text"
-              id="levelCode"
-              formControlName="levelCode"
-              placeholder="L1, L2, L3..."
-            />
+            <label for="levelId" class="form-label">
+              <span class="label-text">Niveau</span>
+              <span class="label-required">*</span>
+            </label>
+            <select id="levelId" formControlName="levelId" class="form-select" (change)="onLevelChange($any($event.target).value)" [class.loading]="loadingData">
+              <option value="">{{ loadingData ? 'Chargement...' : 'Sélectionnez un niveau' }}</option>
+              <option *ngFor="let level of levels" [value]="level.id">
+                {{ level.code }} - {{ level.name }}
+              </option>
+            </select>
+            <span class="error-message" *ngIf="studentForm.get('levelId')?.invalid && studentForm.get('levelId')?.touched">
+              ⚠️ Veuillez sélectionner un niveau
+            </span>
           </div>
 
-          <!-- Niveau ID -->
           <div class="form-group">
-            <label for="levelId">ID Niveau</label>
-            <input
-              type="text"
-              id="levelId"
-              formControlName="levelId"
-              placeholder="1"
-            />
+            <label for="classId" class="form-label">
+              <span class="label-text">Classe</span>
+            </label>
+            <select id="classId" formControlName="classId" class="form-select" [class.loading]="loadingData">
+              <option value="">{{ loadingData ? 'Chargement...' : 'Sélectionnez une classe' }}</option>
+              <option *ngFor="let class of classes" [value]="class.id">
+                {{ class.code }} - {{ class.name }}
+              </option>
+            </select>
           </div>
 
-          <!-- Promotion -->
           <div class="form-group">
-            <label for="promotion">Promotion</label>
+            <label for="promotion" class="form-label">
+              <span class="label-text">Promotion</span>
+            </label>
             <input
               type="text"
               id="promotion"
