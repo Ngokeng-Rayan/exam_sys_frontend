@@ -1,0 +1,105 @@
+<div class="dashboard">
+  <div class="dashboard-header">
+    <div>
+      <h1 class="dashboard-title">{{ getGreeting() }}, {{ currentUser?.firstName }} 👋</h1>
+      <p class="dashboard-subtitle">Bienvenue sur votre tableau de bord</p>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <div class="loading-spinner"></div>
+    <p>Chargement des statistiques...</p>
+  </div>
+
+  <div *ngIf="!loading && statistics" class="dashboard-content">
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">👨‍🎓</div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ statistics.totalStudents || 0 }}</h3>
+          <p class="stat-label">Étudiants</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">👨‍🏫</div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ statistics.totalTeachers || 0 }}</h3>
+          <p class="stat-label">Enseignants</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🏢</div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ statistics.totalDepartments || 0 }}</h3>
+          <p class="stat-label">Départements</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📚</div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ statistics.totalPrograms || 0 }}</h3>
+          <p class="stat-label">Programmes</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Accès rapide</h3>
+        </div>
+        <div class="card-body">
+          <div class="quick-links">
+            <a routerLink="/students" class="quick-link">
+              <span class="quick-link-icon">👨‍🎓</span>
+              <span class="quick-link-text">Gérer les étudiants</span>
+            </a>
+            <a routerLink="/teachers" class="quick-link">
+              <span class="quick-link-icon">👨‍🏫</span>
+              <span class="quick-link-text">Gérer les enseignants</span>
+            </a>
+            <a routerLink="/grades" class="quick-link">
+              <span class="quick-link-icon">📝</span>
+              <span class="quick-link-text">Saisir les notes</span>
+            </a>
+            <a routerLink="/results" class="quick-link">
+              <span class="quick-link-icon">📈</span>
+              <span class="quick-link-text">Voir les résultats</span>
+            </a>
+            <a routerLink="/classes" class="quick-link">
+              <span class="quick-link-icon">🏫</span>
+              <span class="quick-link-text">Gérer les classes</span>
+            </a>
+            <a routerLink="/statistics" class="quick-link">
+              <span class="quick-link-icon">📊</span>
+              <span class="quick-link-text">Statistiques</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Activités récentes</h3>
+        </div>
+        <div class="card-body">
+          <div class="activities" *ngIf="statistics.recentActivities && statistics.recentActivities.length > 0">
+            <div class="activity" *ngFor="let activity of statistics.recentActivities">
+              <div class="activity-icon">📌</div>
+              <div class="activity-content">
+                <p class="activity-description">{{ activity.description }}</p>
+                <span class="activity-time">{{ activity.performedAt | date:'short' }}</span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!statistics.recentActivities || statistics.recentActivities.length === 0" class="empty-state">
+            <p>Aucune activité récente</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
