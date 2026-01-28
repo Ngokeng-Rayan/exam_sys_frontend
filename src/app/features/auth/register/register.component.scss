@@ -1,0 +1,39 @@
+.register-container {
+    width: 100%;
+}
+
+.register-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin: 0 0 var(--spacing-sm) 0;
+    text-align: center;
+}
+
+.register-subtitle {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+    margin: 0 0 var(--spacing-xl) 0;
+    text-align: center;
+}
+
+.register-footer {
+    margin-top: var(--spacing-xl);
+    text-align: center;
+
+    p {
+        font-size: 0.875rem;
+        color: var(--gray-600);
+        margin: 0;
+    }
+
+    a {
+        color: var(--primary-600);
+        font-weight: 600;
+
+        &:hover {
+            color: var(--primary-700);
+            text-decoration: underline;
+        }
+    }
+}

@@ -1,0 +1,56 @@
+<div class="login-container">
+  <h2 class="login-title">Connexion</h2>
+  <p class="login-subtitle">Connectez-vous à votre compte</p>
+
+  <div class="alert alert-error" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        placeholder="votre.email@example.com"
+        [class.error]="email?.invalid && email?.touched"
+      />
+      <span class="error" *ngIf="email?.invalid && email?.touched">
+        <span *ngIf="email?.errors?.['required']">L'email est requis</span>
+        <span *ngIf="email?.errors?.['email']">Email invalide</span>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Mot de passe</label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        placeholder="••••••••"
+        [class.error]="password?.invalid && password?.touched"
+      />
+      <span class="error" *ngIf="password?.invalid && password?.touched">
+        <span *ngIf="password?.errors?.['required']">Le mot de passe est requis</span>
+        <span *ngIf="password?.errors?.['minlength']">Minimum 6 caractères</span>
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label class="checkbox-label">
+        <input type="checkbox" formControlName="rememberMe" />
+        <span>Se souvenir de moi</span>
+      </label>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-full btn-lg" [disabled]="loading || loginForm.invalid">
+      <span *ngIf="!loading">Se connecter</span>
+      <span *ngIf="loading" class="loading-spinner"></span>
+    </button>
+  </form>
+
+  <div class="login-footer">
+    <p>Pas encore de compte ? <a routerLink="/auth/register">S'inscrire</a></p>
+  </div>
+</div>
