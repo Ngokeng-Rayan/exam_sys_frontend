@@ -1,30 +1,96 @@
-<div class="page-container">
-  <div class="page-header">
-    <h1>{{ isEditMode ? 'Modifier la note' : 'Saisir une note' }}</h1>
+<div class="modern-page-container">
+  <div class="modern-header">
+    <div class="header-content">
+      <button type="button" class="btn-back" routerLink="/grades">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+          <path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"/>
+        </svg>
+        Retour
+      </button>
+      <div class="header-title">
+        <h1>{{ isEditMode ? 'Modifier une note' : 'Nouvelle note' }}</h1>
+        <p class="header-subtitle">{{ isEditMode ? 'Modifiez les informations de la note' : 'Saisissez une nouvelle note pour un étudiant' }}</p>
+      </div>
+    </div>
   </div>
 
-  <div class="alert alert-error" *ngIf="error">{{ error }}</div>
+  <div class="alert alert-error" *ngIf="error">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"/>
+    </svg>
+    {{ error }}
+  </div>
 
-  <div class="card">
+  <div class="modern-card">
     <form [formGroup]="gradeForm" (ngSubmit)="onSubmit()">
       <div class="form-section">
-        <h3>Informations générales</h3>
+        <div class="section-header">
+          <h3>📋 Informations générales</h3>
+          <p class="section-subtitle">Sélectionnez l'étudiant et le contexte académique</p>
+        </div>
         <div class="form-grid">
           <div class="form-group">
-            <label>ID Étudiant <span class="required">*</span></label>
-            <input type="number" formControlName="studentId" />
+            <label for="studentId" class="form-label">
+              <span class="label-text">Étudiant</span>
+              <span class="label-required">*</span>
+            </label>
+            <select id="studentId" formControlName="studentId" class="form-select" [class.loading]="loadingStudents">
+              <option value="">{{ loadingStudents ? 'Chargement...' : 'Sélectionnez un étudiant' }}</option>
+              <option *ngFor="let student of students" [value]="student.id">
+                {{ student.matricule }} - {{ student.fullName }}
+              </option>
+            </select>
+            <span class="error-message" *ngIf="gradeForm.get('studentId')?.invalid && gradeForm.get('studentId')?.touched">
+              ⚠️ Veuillez sélectionner un étudiant
+            </span>
           </div>
+
           <div class="form-group">
-            <label>ID ECUE <span class="required">*</span></label>
-            <input type="number" formControlName="ecueId" />
+            <label for="academicYearId" class="form-label">
+              <span class="label-text">Année Académique</span>
+              <span class="label-required">*</span>
+            </label>
+            <select id="academicYearId" formControlName="academicYearId" class="form-select" (change)="onAcademicYearChange($any($event.target).value)" [class.loading]="loadingData">
+              <option value="">{{ loadingData ? 'Chargement...' : 'Sélectionnez une année' }}</option>
+              <option *ngFor="let year of academicYears" [value]="year.id">
+                {{ year.name }} ({{ year.code }})
+              </option>
+            </select>
+            <span class="error-message" *ngIf="gradeForm.get('academicYearId')?.invalid && gradeForm.get('academicYearId')?.touched">
+              ⚠️ Veuillez sélectionner une année académique
+            </span>
           </div>
+
           <div class="form-group">
-            <label>ID Semestre <span class="required">*</span></label>
-            <input type="number" formControlName="semesterId" />
+            <label for="semesterId" class="form-label">
+              <span class="label-text">Semestre</span>
+              <span class="label-required">*</span>
+            </label>
+            <select id="semesterId" formControlName="semesterId" class="form-select" [class.loading]="loadingData">
+              <option value="">{{ loadingData ? 'Chargement...' : 'Sélectionnez un semestre' }}</option>
+              <option *ngFor="let semester of semesters" [value]="semester.id">
+                {{ semester.name }}
+              </option>
+            </select>
+            <span class="error-message" *ngIf="gradeForm.get('semesterId')?.invalid && gradeForm.get('semesterId')?.touched">
+              ⚠️ Veuillez sélectionner un semestre
+            </span>
           </div>
+
           <div class="form-group">
-            <label>ID Année académique <span class="required">*</span></label>
-            <input type="number" formControlName="academicYearId" />
+            <label for="ecueId" class="form-label">
+              <span class="label-text">ECUE (Matière)</span>
+              <span class="label-required">*</span>
+            </label>
+            <select id="ecueId" formControlName="ecueId" class="form-select" [class.loading]="loadingData">
+              <option value="">{{ loadingData ? 'Chargement...' : 'Sélectionnez une ECUE' }}</option>
+              <option *ngFor="let ecue of ecues" [value]="ecue.id">
+                {{ ecue.code }} - {{ ecue.name }}
+              </option>
+            </select>
+            <span class="error-message" *ngIf="gradeForm.get('ecueId')?.invalid && gradeForm.get('ecueId')?.touched">
+              ⚠️ Veuillez sélectionner une ECUE
+            </span>
           </div>
         </div>
       </div>
